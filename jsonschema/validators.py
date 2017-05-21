@@ -4,6 +4,8 @@ import contextlib
 import json
 import numbers
 
+from os.path import basename
+
 try:
     import requests
 except ImportError:
@@ -371,6 +373,8 @@ class RefResolver(object):
             self.pop_scope()
 
     def resolve(self, ref):
+        if ref[0] == '#' and isinstance(self.referrer, str):
+            ref = basename(self.referrer) + ref
         url = self._urljoin_cache(self.resolution_scope, ref)
         return url, self._remote_cache(url)
 
